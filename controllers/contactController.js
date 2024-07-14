@@ -19,7 +19,12 @@ const getContactById = (req, res) => {
 //@access public
 
 const createContact = (req, res) => {
-  res.status(200).json({ message: 'Contact created!' });
+  const { firstName, email, phoneNumber } = req?.body;
+  if (!firstName || !email || !phoneNumber) {
+    res.status(400);
+    throw new Error('All fields are mandatory!');
+  }
+  res.status(201).json({ message: 'Contact created!' });
 };
 
 //@desc Update contact by Id
