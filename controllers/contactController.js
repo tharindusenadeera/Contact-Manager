@@ -15,7 +15,13 @@ const getContacts = asyncHandler(async (req, res) => {
 //@access public
 
 const getContactById = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Get contact by id : ${req?.params?.id}` });
+  const id = req?.params?.id;
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    res.status(404);
+    throw new Error('Contact not found');
+  }
+  res.status(200).json({ data: contact });
 });
 
 //@desc Create contact
@@ -28,7 +34,13 @@ const createContact = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('All fields are mandatory!');
   }
-  res.status(201).json({ message: 'Contact created!' });
+
+  const contact = await Contact.create({
+    name,
+    email,
+    phoneNumber,
+  });
+  res.status(201).json({ message: 'Contact created!', data: contact });
 });
 
 //@desc Update contact by Id
@@ -36,7 +48,15 @@ const createContact = asyncHandler(async (req, res) => {
 //@access public
 
 const updateContact = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Update contact by id : ${req?.params?.id}` });
+  const id = req?.params?.id;
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    res.status(404);
+    throw new Error('Contact not found');
+  }
+
+  const updateContact = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  res.status(200).json({ message: `success`, data: updateContact });
 });
 
 //@desc Delete contact by Id
