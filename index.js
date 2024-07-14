@@ -2,7 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv').config();
 const contactRoutes = require('./routes/contactRoutes');
 const errorHander = require('./middleware/errorHandler');
+const connectDb = require('./config/dbConnection');
 
+connectDb();
 const app = express();
 
 const port = process.env.PORT || 3000;
