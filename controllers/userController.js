@@ -8,7 +8,11 @@ const User = require('../models/userModel');
 //@access private
 
 const getCurrentUser = asyncHandler(async (req, res) => {
-  const user = await User.find();
+  const user = req?.user;
+  if (!user) {
+    res.status(404);
+    throw new Error('User data not found');
+  }
   res.status(200).json({ message: 'Get current user', data: user });
 });
 
